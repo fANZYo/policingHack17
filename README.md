@@ -9,6 +9,9 @@ A communication system to share updates on the investigation of a crime, combine
 ## Wireframe
 ![UI](https://i.imgur.com/hwGu6sg.jpg?1)
 
+## Flowchart
+![flowchart](https://i.imgur.com/C6IuE51.jpg?1)
+
 ## Scripts
 To install the project:
 ```
