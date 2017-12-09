@@ -28,5 +28,4 @@ FLASK_APP=server.py flask run
 
 ## Dependencies
 
-For the backend server, you need to install:
-```flask```
+For the backend server, you need to install: `flask`
