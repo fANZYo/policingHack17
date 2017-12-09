@@ -6,6 +6,9 @@ The current system by which police officers communicate information to victims i
 ## Our solution
 A communication system to share updates on the investigation of a crime, combined with notifications, status and further information regarding the progress of the investigation and optional information explaining some of the reasoning behing the decisions made by the officer.
 
+## Wireframe
+![UI](https://i.imgur.com/hwGu6sg.jpg?1)
+
 ## Scripts
 To install the project:
 ```
