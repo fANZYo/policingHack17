@@ -15,3 +15,12 @@ To run the dev server:
 ```
 $ npm start
 ```
+To run the server:
+```
+FLASK_APP=server.py flask run
+```
+
+## Dependencies
+
+For the backend server, you need to install:
+```flask```
