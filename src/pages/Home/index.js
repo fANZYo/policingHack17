@@ -6,9 +6,6 @@ import Add from '../../components/Add';
 import Report from '../../components/ReportForm';
 import File from '../../components/FileForm';
 
-// Dummy data
-import data from './dummy.json';
-
 // Style
 import './index.css';
 
@@ -32,10 +29,10 @@ class Home extends React.Component {
       timeline: [],
       report: false,
       file: false,
+      isVictim: false,
     };
 
     sub((err, val) => {
-      console.log(val);
       let arr = this.state.timeline.slice();
       arr.push(val.updated);
       this.setState({timeline: arr});
@@ -58,7 +55,8 @@ class Home extends React.Component {
       "crimeID": "000001",
       "title": event.target.title.value,
       "description": event.target.description.value,
-      "status": "on going"
+      "status": "on going",
+      "isVictim": this.state.isVictim,
     };
 
     var xhr = new XMLHttpRequest();
@@ -76,7 +74,7 @@ class Home extends React.Component {
 
   close(event) {
     event.preventDefault();
-    this.setState({ report: false, file: false });
+    this.setState({ report: false, file: false, isVictim: false });
   }
 
   addHandler(event) {
@@ -88,6 +86,10 @@ class Home extends React.Component {
     this.setState({ collapsed: !this.state.collapsed })
   }
 
+  isVicHandler(event) {
+    this.setState({isVictim: !this.state.isVictim});
+  }
+
   fileUpload(event) {
     event.preventDefault();
     const data = new FormData();
@@ -95,6 +97,7 @@ class Home extends React.Component {
     data.append("file", event.target.file.files[0]);
     data.append("title", event.target.title.value);
     data.append("description", event.target.description.value);
+    data.append("isVictim", this.state.isVictim);
 
     var xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
@@ -117,7 +120,7 @@ class Home extends React.Component {
     xhr.addEventListener("readystatechange", () => {
       if (xhr.readyState === 4) {
         const d = JSON.parse(xhr.responseText);
-        this.setState({report: false, file: false, data: d, timeline: d.timeline});
+        this.setState({report: false, file: false, isVictim: false, data: d, timeline: d.timeline});
         window.scrollTo(0, 1000000000);
       }
     });
@@ -140,8 +143,8 @@ class Home extends React.Component {
           file={this.fileHandler.bind(this)}
           collapsed={this.state.collapsed}
         />
-        {this.state.report && <Report reportSend={this.addReport.bind(this)} close={this.close.bind(this)} />}
-        {this.state.file && <File fileUpload={this.fileUpload.bind(this)} close={this.close.bind(this)} />}
+        {this.state.report && <Report isVic={this.isVicHandler.bind(this)} reportSend={this.addReport.bind(this)} close={this.close.bind(this)} />}
+        {this.state.file && <File isVic={this.isVicHandler.bind(this)} fileUpload={this.fileUpload.bind(this)} close={this.close.bind(this)} />}
       </section>
     );
   }
