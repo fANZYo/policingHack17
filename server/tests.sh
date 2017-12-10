@@ -12,11 +12,11 @@ curl -H "Content-Type: application/json" -d '{"hello":"world"}' $HOST/createCrim
 echo "\n-> Valid input"
 curl -H "Content-Type: application/json" -d '{"officer":"me","name":"AAA","description":"AA"}' $HOST/createCrime
 echo "\n-> Add something to the list"
-curl -H "Content-Type: application/json" -d '{"crimeID":"000001","name":"me","description":"AA","state":"fun"}' $HOST/updateCrime
+curl -v -H "Content-Type: application/json" -d '{"crimeID":"000001","name":"me","description":"AA","state":"fun"}' $HOST/updateCrime
 echo "\n-> list reports"
 curl $HOST/listReports
 echo "\n-> update meta"
-#curl -H "Content-Type: application/json" -d '{"crimeID":"61efe834eee37d49fd3fcc3740e521b3297215de3005fd652866a6adecf29edd","title":"testnow"}' $HOST/updateMeta
+curl -H "Content-Type: application/json" -d '{"crimeID":"000001","name":"Did You See This Coming?"}' $HOST/updateMeta
 #curl -H "Content-Type: application/json" -d '{"crimeID":"61efe834eee37d49fd3fcc3740e521b3297215de3005fd652866a6adecf29edd"}' $HOST/deleteReport
 curl -H "Content-Type: application/json" -d '{"crimeID":"fdf627342438304b0c962bc4251bc998353d1f538238dcc7ca4dd9d565a2c5ea","uuidState":"6c30aa9f91ce685e529a82599990a53ddb634ad975706943df017e2e55aee1e2"}' $HOST/deleteState
 curl $HOST/listReports

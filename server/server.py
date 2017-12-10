@@ -10,8 +10,12 @@ from werkzeug.utils import secure_filename
 from pymongo import MongoClient
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources='/')
 app.config['UPLOAD_FOLDER'] = './temp/'
+app.config['SECRET_KEY'] = 'the quick brown fox jumps over the lazy   dog'
+#app.config['CORS_HEADERS'] = 'Content-Type'
+
+cors = CORS(app, supports_credentials=True)
 
 # wrapper in case this gets changed in the future
 def generateID(length):
@@ -95,13 +99,13 @@ def updateReport():
         # Read the values in
         userData    = request.json
         crimeID     = userData['crimeID']
-        name        = userData['name']
+        name        = userData['title']
         description = userData['description']
         status       = userData['status']
         date        = datetime.now().isoformat()
         item = {
             "uuid":generateID(32),
-            "name":name,
+            "title":name,
             "description":description,
             "status":status,
             "date":date
@@ -227,7 +231,7 @@ def deleteState():
         uuidState   = userData['uuidState']
         reports.update(
             {'crimeID':crimeID},
-            {'$pull':{'status':{'uuid':uuidState}}}
+            {'$pull':{'timeline':{'uuid':uuidState}}}
         )
     except:
         return json.dumps({'error':True})
