@@ -15,26 +15,28 @@ A communication system to share updates on the investigation of a crime, combine
 JSON file:
 ```
 {
-  "crime-id": "000001",
+  "crimeID": "000001",
   "name": "Kidnapping of doodle",
-  "time": "2017-12-09 17:10",
+  "date": "2017-12-10T02:18:21.549358",
   "description": "Criminally good hackathon project",
   "status": "Investigating",
+  "officer": "Somebody",
+  "location": {}
   "timeline": [
     {
-      "date": "2017-12-09 21:30",
+      "date": "2017-12-10T02:20:21.549358",
       "title": "Looking for evidence",
       "description": "",
       "state": "pending"
     },
     {
-      "date": "2017-12-09 24:15",
+      "date": "2017-12-10T02:30:21.549358",
       "title": "Handed self administered interview forms",
       "description": "Used because of the large amount of witnesses",
       "state": "pending"
     },
     {
-      "date": "2017-12-09 01:25",
+      "date": "2017-12-10T02:40:21.549358",
       "title": "Found doodle",
       "description": "Found doodle in the cookie jar",
       "state": "done",

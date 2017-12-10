@@ -51,7 +51,7 @@ def createReport():
         userData    = request.json
         crimeID     = generateID(32)
         officer     = userData['officer']
-        title       = userData['title']
+        name        = userData['name']
         description = userData['description']
         if 'coords' in userData:
             coords = userData['coords']
@@ -62,11 +62,11 @@ def createReport():
         form = {
             'crimeID':crimeID,
             'officer':officer,
-            'title':title,
+            'name':name,
             'description':description,
             'location':{
             },
-            'status':[]
+            'timeline':[]
         }
         if 'coords' in userData:
             form['location']['coords'] = coords
@@ -91,7 +91,7 @@ def updateReport():
         name        = userData['name']
         description = userData['description']
         state       = userData['state']
-        date        = datetime.now()
+        date        = datetime.now().isoformat()
         item = {
             "uuid":generateID(32),
             "name":name,
@@ -113,7 +113,7 @@ def updateReport():
             item['media'] = allMedia
         reports.update(
             {'crimeID':crimeID},
-            {"$push": {"status":item}}
+            {"$push": {"timeline":item}}
         )
     except:
         return json.dumps({'error':True})
@@ -123,7 +123,7 @@ def updateReport():
 """
 # /updateMeta
 
-Method to call when you want to update the title, description, officer or
+Method to call when you want to update the name, description, officer or
 status.
 
 """
@@ -139,8 +139,8 @@ def updateReportMeta():
         crimeID    = userData['crimeID']
         if 'officer' in userData:
             form['officer'] = userData['officer']
-        if 'title' in userData:
-            form['title'] = userData['title']
+        if 'name' in userData:
+            form['name'] = userData['name']
         if 'description' in userData:
             form['description'] = userData['description']
         if form != {}:
@@ -195,7 +195,7 @@ def deleteReport():
     
     try:
         userData    = request.json
-        crimeID    = userData['crimeID']
+        crimeID     = userData['crimeID']
         reports.delete_one({'crimeID':crimeID})
     except:
         return json.dumps({'error':True})
@@ -245,9 +245,10 @@ def listReports():
     for report in reports.find({}):
         # clean up mongos results so we can serialize it
         form = {
-            'title':report['title'],
+            'name':report['name'],
             'officer':report['officer'],
-            'description':report['description']
+            'description':report['description'],
+            'crimeID':report['crimeID']
         }
         listOfReports.append(form)
 
@@ -259,7 +260,7 @@ def listReports():
 View a report in detail.
 
 """
-@app.route('/report/<crimeId>')
+@app.route('/report/<crimeID>')
 def fetchReport(crimeID):
     client  = get_db()
     db      = client['policeDB']
