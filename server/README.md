@@ -4,11 +4,11 @@ This directory contains the source code for the backend server.
 
 ## Endpoints
 
-/createCrime - JSON POST, Required: officer, name, description; Optional: coords
+/createCrime - JSON POST, Required: officer, name, description; Optional: coords, status
 
 Creates a new crime report, returns the ID
 
-* /updateCrime - JSON POST, Required: crimeid, name, description, state; Optional: media
+* /updateCrime - JSON POST, Required: crimeid, name, description, status; Optional: media
 
 Updates the crime progress. Media takes a list of filenames from the upload function.
 

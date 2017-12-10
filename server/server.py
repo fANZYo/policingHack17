@@ -53,8 +53,13 @@ def createReport():
         officer     = userData['officer']
         name        = userData['name']
         description = userData['description']
+        date        = datetime.now().isoformat()
         if 'coords' in userData:
             coords = userData['coords']
+        if 'status' in userData:
+            status = userData['status']
+        else:
+            status = 'Started'
         # Store it in the Database
         client      = get_db()
         db          = client['policeDB']
@@ -64,6 +69,8 @@ def createReport():
             'officer':officer,
             'name':name,
             'description':description,
+            'date':date,
+            'status':status,
             'location':{
             },
             'timeline':[]
@@ -90,13 +97,13 @@ def updateReport():
         crimeID     = userData['crimeID']
         name        = userData['name']
         description = userData['description']
-        state       = userData['state']
+        status       = userData['status']
         date        = datetime.now().isoformat()
         item = {
             "uuid":generateID(32),
             "name":name,
             "description":description,
-            "state":state,
+            "status":status,
             "date":date
         }
 
