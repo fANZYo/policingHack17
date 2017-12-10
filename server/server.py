@@ -4,10 +4,12 @@ import json
 import os
 from datetime import datetime
 # external dependencies
-from flask import Flask, request, g
+from flask import Flask, request, send_from_directory,g
+from werkzeug.utils import secure_filename
 from pymongo import MongoClient
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = './temp/'
 
 # wrapper in case this gets changed in the future
 def generateID(length):
@@ -24,70 +26,100 @@ def get_db():
 def indexPage():
     return ''
 
+@app.route('/files/<filename>')
+def uploaded_file(filename):
+    client  = get_db()
+    db      = client['policeDB']
+    images  = db.images
+    imageMeta = images.find_one({'filename':filename})
+    mimetype = imageMeta['content-type']
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+        filename, mimetype=mimetype)
+
 """
 # /createReport
 
 Creates a report to share information on.
+
 """
 @app.route('/createCrime', methods=['POST'])
 def createReport():
     try:
         # Get the data
         userData    = request.json
-        uuid        = generateID(32)
+        crimeID     = generateID(32)
         officer     = userData['officer']
         title       = userData['title']
         description = userData['description']
+        if 'coords' in userData:
+            coords = userData['coords']
         # Store it in the Database
         client      = get_db()
         db          = client['policeDB']
         reports     = db.reports
-        reports.insert_one({
-            'uuid':uuid,
+        form = {
+            'crimeID':crimeID,
             'officer':officer,
             'title':title,
             'description':description,
+            'location':{
+            },
             'status':[]
-        })
+        }
+        if 'coords' in userData:
+            form['location']['coords'] = coords
+        reports.insert_one(form)
     except:
         return json.dumps({'error':True})
-    # Return the uuid so they can look it up instantly.
-    return json.dumps({'uuid':uuid})
+    # Return the crimeID so they can look it up instantly.
+    return json.dumps({'crimeID':crimeID})
 
 """
 # /updateCrime
 
 Used to append to a report.
+
 """
 @app.route('/updateCrime', methods=['POST'])
 def updateReport():
     try:
         # Read the values in
         userData    = request.json
-        uuid        = userData['uuid']
-        title       = userData['title']
+        crimeID     = userData['crimeID']
+        name        = userData['name']
         description = userData['description']
         state       = userData['state']
         date        = datetime.now()
         item = {
             "uuid":generateID(32),
-            "title":title,
+            "name":name,
             "description":description,
             "state":state,
             "date":date
         }
+
         # append this into the data structure
         client  = get_db()
         db      = client['policeDB']
+        images  = db.images
         reports = db.reports
+        print "AA"
+        if 'images' in userData:
+            allMedia = []
+            print "AAA"
+            for image in images.find({'filename':{'$in':userData['images']}}):
+                del image['_id']
+                allMedia.append(image)
+            item['media'] = allMedia
+        print item
         reports.update(
-            {'uuid':uuid},
+            {'crimeID':crimeID},
             {"$push": {"status":item}}
         )
     except:
         return json.dumps({'error':True})
     
-    return json.dumps({'uuid':uuid})
+    return json.dumps({'crimeID':crimeID})
 
 """
 # /updateMeta
@@ -105,7 +137,7 @@ def updateReportMeta():
     try:
         form = {}
         userData    = request.json
-        uuid        = userData['uuid']
+        crimeID    = userData['crimeID']
         if 'officer' in userData:
             form['officer'] = userData['officer']
         if 'title' in userData:
@@ -114,18 +146,94 @@ def updateReportMeta():
             form['description'] = userData['description']
         if form != {}:
             reports.update(
-                {'uuid':uuid},
+                {'crimeID':crimeID},
                 {'$set':form}
             )
     except:
         return json.dumps({'error':True})
     
-    return json.dumps({'uuid':uuid})
+    return json.dumps({'crimeID':crimeID})
+
+"""
+# /uploadMedia
+
+Allows you to upload files. These can then be added to a file.
+"""
+@app.route("/uploadMedia", methods=['POST'])
+def uploadMedia():
+    if 'file' not in request.files:
+        return ''
+    file = request.files['file']
+    print file
+    if file.filename == '':
+        return ''
+    filename = generateID(16)
+    client  = get_db()
+    db      = client['policeDB']
+    images  = db.images
+    filetype = file.content_type
+    url = "https://192.168.1.34:5000/files/"+filename
+    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    images.insert_one(
+            {
+                'filename':filename,
+                'content-type':filetype,
+                'url':url
+            })
+    return ''
+
+
+"""
+# /deleteReport
+
+Takes an ID of a report and deletes it.
+
+"""
+@app.route("/deleteReport", methods=['POST'])
+def deleteReport():
+    client  = get_db()
+    db      = client['policeDB']
+    reports = db.reports
+    
+    try:
+        userData    = request.json
+        crimeID    = userData['crimeID']
+        reports.delete_one({'crimeID':crimeID})
+    except:
+        return json.dumps({'error':True})
+
+    return json.dumps({'crimeID':crimeID})
+
+"""
+# /deleteUpdate
+
+Takes an ID of a item in the state and removes it
+
+"""
+@app.route("/deleteState", methods=['POST'])
+def deleteState():
+    client  = get_db()
+    db      = client['policeDB']
+    reports = db.reports
+    
+    try:
+        userData    = request.json
+        crimeID     = userData['crimeID']
+        uuidState   = userData['uuidState']
+        reports.update(
+            {'crimeID':crimeID},
+            {'$pull':{'status':{'uuid':uuidState}}}
+        )
+    except:
+        return json.dumps({'error':True})
+    
+    return json.dumps({'error':False})
 
 """
 # /listReports
 
-Lists reports managed by an Officer
+Lists reports managed by an Officer.
+
 """
 @app.route('/listReports')
 def listReports():
@@ -151,14 +259,15 @@ def listReports():
 # /report/<id>
 
 View a report in detail.
+
 """
-@app.route('/report/<uuid>')
-def fetchReport(uuid):
+@app.route('/report/<crimeId>')
+def fetchReport(crimeID):
     client  = get_db()
     db      = client['policeDB']
     reports = db.reports
     
-    report = reports.find_one({'uuid':uuid})
+    report = reports.find_one({'crimeID':crimeID})
     if report == None:
         return json.dumps({'err':'cant find'})
     del report['_id']
