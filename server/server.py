@@ -120,7 +120,7 @@ def updateReport():
         db      = client['policeDB']
         images  = db.images
         reports = db.reports
-        if 'images' in userData:
+        if 'media' in userData:
             allMedia = []
             for image in images.find({'filename':{'$in':userData['images']}}):
                 del image['_id']
@@ -185,7 +185,7 @@ def uploadMedia():
     db      = client['policeDB']
     images  = db.images
     filetype = file.content_type
-    url = "https://192.168.1.34:5000/files/"+filename
+    url = "http://192.168.1.34:5000/files/"+filename
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     images.insert_one(
     {
@@ -193,6 +193,39 @@ def uploadMedia():
         'content-type':filetype,
         'url':url
     })
+    try:
+        crimeID = request.form.get('crimeID')
+        name = request.form.get('title')
+        description = request.form.get('description')
+        status = "on"
+        date = datetime.now().isoformat()
+        item = {
+            "uuid":generateID(32),
+            "title":name,
+            "description":description,
+            "status":status,
+            "date":date
+        }
+        if 'isVictim' in request.form:
+            item['isVictrim'] = request.form.get('isVictim')
+        # append this into the data structure
+        client  = get_db()
+        db      = client['policeDB']
+        images  = db.images
+        reports = db.reports
+        allMedia = []
+        print "AA"
+        for image in images.find({'filename':filename}):
+            del image['_id']
+            allMedia.append(image)
+        item['media'] = allMedia
+        reports.update(
+            {'crimeID':crimeID},
+            {"$push": {"timeline":item}}
+        )
+    except:
+        return json.dumps({})
+    socketio.emit(crimeID,{"updated":item})
     return json.dumps({'filename':filename})
 
 
