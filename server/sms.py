@@ -14,6 +14,8 @@ class Notification:
         actualMessage = rawMessage[:140]
         if len(actualMessage) == 140:
             actualMessage = actualMessage[:137]+'...'
+        if len(actualMessage) == 0:
+            return
         message = self.client.messages.create(to=to, from_=self.fromNumber,
                 body=actualMessage)
 
