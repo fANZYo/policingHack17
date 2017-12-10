@@ -8,11 +8,11 @@ This directory contains the source code for the backend server.
 
 Creates a new crime report, returns the ID
 
-* /updateCrime - JSON POST, Required: crimeid, name, description, status; Optional: media
+* /updateCrime - JSON POST, Required: crimeID, name, description, status; Optional: media
 
 Updates the crime progress. Media takes a list of filenames from the upload function.
 
-* /updateMeta - JSON POST, Required: CrimeID; Optional:  officer, name, description
+* /updateMeta - JSON POST, Required: crimeID; Optional:  officer, name, description
 
 Allows you to update the meta information for a crime.
 

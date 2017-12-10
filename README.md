@@ -21,7 +21,7 @@ JSON file:
   "description": "Criminally good hackathon project",
   "status": "Investigating",
   "officer": "Somebody",
-  "location": {}
+  "location": {},
   "timeline": [
     {
       "date": "2017-12-10T02:20:21.549358",
