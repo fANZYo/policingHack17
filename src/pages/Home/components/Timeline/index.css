@@ -12,7 +12,8 @@
     padding: 1.5em 0 1.5em 1em;
     position: relative; }
     .line__item:last-child {
-      padding-bottom: 0; }
+      padding-bottom: 0;
+      margin-bottom: 5em; }
     .line__item::after {
       content: "";
       display: inline-block;
@@ -27,12 +28,22 @@
     .line__item__card {
       background: #eee;
       box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
       display: inline-block;
+      margin-left: 1em;
       padding: 1em 1.5em;
-      position: relative; }
+      position: relative;
+      transition: .2s; }
+      .line__item__card:hover {
+        background: #f5f5f5; }
     .line__item__title {
       font-weight: 600;
       font-size: 1.1em; }
     .line__item__date {
       color: #aaa;
-      font-size: .875em; }
+      font-size: .875em;
+      margin-bottom: .5em; }
+    .line__item__file {
+      margin-right: .5em; }
+    .line__item__description {
+      margin-bottom: .25em; }

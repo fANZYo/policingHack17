@@ -1,0 +1,28 @@
+.report {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ccc;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
+  padding: 2em; }
+  .report__close {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    cursor: pointer; }
+  .report__label {
+    display: block; }
+  .report__input {
+    display: block;
+    border-radius: 3px;
+    border: 1px solid grey;
+    padding: .5em;
+    margin-bottom: 1em; }
+  .report__submit {
+    background: #f77b04;
+    padding: .5em 1em;
+    border: none;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    color: white;
+    cursor: pointer; }

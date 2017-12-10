@@ -1,0 +1,34 @@
+.add {
+  bottom: 5em;
+  width: 10em;
+  overflow: hidden;
+  position: fixed;
+  right: 1em;
+  transition: .2s; }
+  .add--collapse {
+    width: 0; }
+  .add__button {
+    position: fixed;
+    bottom: 1em;
+    right: 1em;
+    background: #F77B05;
+    border: 0;
+    border-radius: 50%;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    cursor: pointer;
+    font-size: 2em;
+    height: 1.5em;
+    outline: none;
+    width: 1.5em;
+    transition: .2s; }
+    .add__button:hover {
+      background: #FF8812; }
+  .add__item {
+    background: #eea;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    margin: 0 2em;
+    overflow: hidden;
+    padding: 1.25em 1.5em;
+    text-align: center; }

@@ -7,4 +7,5 @@
   .nav__list__item {
     padding: 1em 0; }
     .nav__list__item--hamburger {
-      font-size: 1em; }
+      font-size: 1em;
+      cursor: pointer; }
