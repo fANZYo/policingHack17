@@ -185,7 +185,7 @@ def uploadMedia():
     db      = client['policeDB']
     images  = db.images
     filetype = file.content_type
-    url = "http://192.168.1.34:5000/files/"+filename
+    url = "http://localhost:5000/files/"+filename
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     images.insert_one(
     {

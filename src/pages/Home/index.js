@@ -10,10 +10,10 @@ import File from '../../components/FileForm';
 import './index.css';
 
 import openSocket from 'socket.io-client';
-const socket = openSocket('http://192.168.1.34:5000');
+const socket = openSocket('http://localhost:5000');
 
 const sub = (cb) => {
-  socket.on('000001', (event) => cb(null, event));
+  socket.on('4daae28f26021bb18ccd611342459110c872fb9ef4cb06663c47ee97434a2390', (event) => cb(null, event));
 };
 
 class Home extends React.Component {
@@ -21,6 +21,7 @@ class Home extends React.Component {
     super(props);
 
     this.state = {
+      crimeID: '4daae28f26021bb18ccd611342459110c872fb9ef4cb06663c47ee97434a2390',
       collapsed: true,
       state: false,
       data: {
@@ -52,7 +53,7 @@ class Home extends React.Component {
   addReport(event) {
     event.preventDefault();
     const data = {
-      "crimeID": "000001",
+      "crimeID": this.state.crimeID,
       "title": event.target.title.value,
       "description": event.target.description.value,
       "status": "on going",
@@ -66,7 +67,7 @@ class Home extends React.Component {
         this.componentWillMount();
     });
 
-    xhr.open("POST", "http://192.168.1.34:5000/updateCrime");
+    xhr.open("POST", "http://localhost:5000/updateCrime");
     xhr.setRequestHeader("content-type", "application/json");
 
     xhr.send(JSON.stringify(data));
@@ -93,7 +94,7 @@ class Home extends React.Component {
   fileUpload(event) {
     event.preventDefault();
     const data = new FormData();
-    data.append("crimeID", "000001");
+    data.append("crimeID", this.state.crimeID);
     data.append("file", event.target.file.files[0]);
     data.append("title", event.target.title.value);
     data.append("description", event.target.description.value);
@@ -106,7 +107,7 @@ class Home extends React.Component {
         this.componentWillMount();
     });
 
-    xhr.open("POST", "http://192.168.1.34:5000/uploadMedia");
+    xhr.open("POST", "http://localhost:5000/uploadMedia");
 
     xhr.send(data);
   }
@@ -125,7 +126,7 @@ class Home extends React.Component {
       }
     });
 
-    xhr.open("GET", "http://192.168.1.34:5000/report/000001");
+    xhr.open("GET", `http://localhost:5000/report/${this.state.crimeID}`);
     xhr.setRequestHeader("content-type", "application/json");
 
     xhr.send(data);
