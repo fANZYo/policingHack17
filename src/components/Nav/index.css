@@ -1,0 +1,10 @@
+.nav__list {
+  height: 9em;
+  overflow: hidden;
+  transition: .2s; }
+  .nav__list--collapse {
+    height: 3em; }
+  .nav__list__item {
+    padding: 1em 0; }
+    .nav__list__item--hamburger {
+      font-size: 1em; }
