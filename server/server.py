@@ -4,11 +4,13 @@ import json
 import os
 from datetime import datetime
 # external dependencies
-from flask import Flask, request, send_from_directory,g
+from flask import Flask, request, send_from_directory, g
+from flask_cors import CORS, cross_origin
 from werkzeug.utils import secure_filename
 from pymongo import MongoClient
 
 app = Flask(__name__)
+CORS(app)
 app.config['UPLOAD_FOLDER'] = './temp/'
 
 # wrapper in case this gets changed in the future
@@ -103,15 +105,12 @@ def updateReport():
         db      = client['policeDB']
         images  = db.images
         reports = db.reports
-        print "AA"
         if 'images' in userData:
             allMedia = []
-            print "AAA"
             for image in images.find({'filename':{'$in':userData['images']}}):
                 del image['_id']
                 allMedia.append(image)
             item['media'] = allMedia
-        print item
         reports.update(
             {'crimeID':crimeID},
             {"$push": {"status":item}}
@@ -164,7 +163,6 @@ def uploadMedia():
     if 'file' not in request.files:
         return ''
     file = request.files['file']
-    print file
     if file.filename == '':
         return ''
     filename = generateID(16)
@@ -175,12 +173,12 @@ def uploadMedia():
     url = "https://192.168.1.34:5000/files/"+filename
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     images.insert_one(
-            {
-                'filename':filename,
-                'content-type':filetype,
-                'url':url
-            })
-    return ''
+    {
+        'filename':filename,
+        'content-type':filetype,
+        'url':url
+    })
+    return json.dumps({'filename':filename})
 
 
 """
