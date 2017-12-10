@@ -114,7 +114,7 @@ def updateReport():
             "date":date
         }
         if 'isVictim' in userData:
-            item['isVictrim'] = userData['isVictim']
+            item['isVictim'] = userData['isVictim']
         # append this into the data structure
         client  = get_db()
         db      = client['policeDB']
@@ -207,7 +207,7 @@ def uploadMedia():
             "date":date
         }
         if 'isVictim' in request.form:
-            item['isVictrim'] = request.form.get('isVictim')
+            item['isVictim'] = request.form.get('isVictim')
         # append this into the data structure
         client  = get_db()
         db      = client['policeDB']
