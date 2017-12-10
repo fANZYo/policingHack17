@@ -1,19 +1,50 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {
+  BrowserRouter as Router,
+  Route,
+} from 'react-router-dom';
+
+// Styles
+import './reset.css';
+import './index.css';
+
+// Components
+import Nav from './components/Nav';
+import Home from './pages/Home';
+import Faq from './pages/Faq';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      collapsed: true,
+    };
+  }
+
+  navHandler(event) {
+    event.stopPropagation();
+    this.setState({ collapsed: !this.state.collapsed })
+  }
+
+  navUp(event) {
+    this.setState({ collapsed: true })
+  }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+      <Router>
+        <div className="wrapper" onClick={this.navUp.bind(this)}>
+          <header className="header">
+            <h1 className="header__title"><img className="header__title__img" src="logo.png" alt="Policing hackathon logo" /></h1>
+            <Nav collapsed={this.state.collapsed} handler={this.navHandler.bind(this)} />
+          </header>
+          <section>
+            <Route exact path="/" component={Home} />
+            <Route path="/faq" component={Faq} />
+          </section>
+        </div>
+      </Router>
     );
   }
 }

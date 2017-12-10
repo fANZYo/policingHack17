@@ -1,0 +1,9 @@
+.case {
+  margin: 0 auto;
+  max-width: 960px;
+  padding: 0 1em; }
+  .case__title {
+    font-size: 2em;
+    margin-bottom: .25em; }
+  .case__description {
+    margin-bottom: 2em; }

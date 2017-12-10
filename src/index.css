@@ -1,0 +1,14 @@
+.header {
+  background: #385790;
+  color: #fff;
+  margin-bottom: 1em;
+  padding: .5em 1em; }
+  .header__title {
+    left: 1em;
+    position: absolute;
+    top: .75em;
+    width: 32px; }
+    .header__title__img {
+      max-width: 100%; }
+  .header__nav {
+    text-align: right; }
