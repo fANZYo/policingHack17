@@ -67,5 +67,5 @@ FLASK_APP=server.py flask run
 ```
 
 ## Dependencies
-For the backend server, you need the following Python dependencies: `flask`, `flask_cors`, `pymongo`
+For the backend server, you need the following Python dependencies: `flask`, `flask_cors`, `pymongo`, `socketIO_client`, `flask_socketio`
 MongoDB is required for the backend.

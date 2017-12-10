@@ -6,6 +6,7 @@ from datetime import datetime
 # external dependencies
 from flask import Flask, request, send_from_directory, g
 from flask_cors import CORS, cross_origin
+from flask_socketio import SocketIO, send, emit
 from werkzeug.utils import secure_filename
 from pymongo import MongoClient
 
@@ -14,8 +15,8 @@ CORS(app, resources='/')
 app.config['UPLOAD_FOLDER'] = './temp/'
 app.config['SECRET_KEY'] = 'the quick brown fox jumps over the lazy   dog'
 #app.config['CORS_HEADERS'] = 'Content-Type'
-
 cors = CORS(app, supports_credentials=True)
+socketio = SocketIO(app)
 
 # wrapper in case this gets changed in the future
 def generateID(length):
@@ -31,6 +32,8 @@ def get_db():
 @app.route('/')
 def indexPage():
     return ''
+
+
 
 @app.route('/files/<filename>')
 def uploaded_file(filename):
@@ -101,7 +104,7 @@ def updateReport():
         crimeID     = userData['crimeID']
         name        = userData['title']
         description = userData['description']
-        status       = userData['status']
+        status      = userData['status']
         date        = datetime.now().isoformat()
         item = {
             "uuid":generateID(32),
@@ -110,7 +113,8 @@ def updateReport():
             "status":status,
             "date":date
         }
-
+        if 'isVictim' in userData:
+            item['isVictrim'] = userData['isVictim']
         # append this into the data structure
         client  = get_db()
         db      = client['policeDB']
@@ -128,7 +132,7 @@ def updateReport():
         )
     except:
         return json.dumps({'error':True})
-    
+    socketio.emit(crimeID,{"updated":item})
     return json.dumps({'crimeID':crimeID})
 
 """
@@ -284,4 +288,4 @@ def fetchReport(crimeID):
     return json.dumps(report)
 
 if __name__ == "__main__":
-    app.run()
+    socketio.run(app)

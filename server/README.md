@@ -8,9 +8,10 @@ This directory contains the source code for the backend server.
 
 Creates a new crime report, returns the ID
 
-* /updateCrime - JSON POST, Required: crimeID, name, description, status; Optional: media
+* /updateCrime - JSON POST, Required: crimeID, name, description, status; Optional: media, isVictim
 
 Updates the crime progress. Media takes a list of filenames from the upload function.
+isVictim shows if the post is by the victim, allowing them to add extra information
 
 * /updateMeta - JSON POST, Required: crimeID; Optional:  officer, name, description
 
@@ -32,3 +33,7 @@ Lists all the reports
 
 Gets the document for a Crime.
 
+## The Tracking
+
+There is an SMS class for sending messages via Twilio, a script for watching
+updates via socket.io and one script to insert data in the database.

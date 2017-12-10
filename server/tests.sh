@@ -12,7 +12,7 @@ curl -H "Content-Type: application/json" -d '{"hello":"world"}' $HOST/createCrim
 echo "\n-> Valid input"
 curl -H "Content-Type: application/json" -d '{"officer":"me","name":"AAA","description":"AA"}' $HOST/createCrime
 echo "\n-> Add something to the list"
-curl -v -H "Content-Type: application/json" -d '{"crimeID":"000001","name":"me","description":"AA","state":"fun"}' $HOST/updateCrime
+curl -v -H "Content-Type: application/json" -d '{"crimeID":"899c8df4e956334979f94acbf29800b5c79a1a1ee1a27859d45e24d3f890707e","name":"I cant belive this!","description":"AA","state":"fun"}' $HOST/updateCrime
 echo "\n-> list reports"
 curl $HOST/listReports
 echo "\n-> update meta"
