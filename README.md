@@ -52,6 +52,10 @@ JSON file:
 }
 ```
 
+## Dependencies
+The backend runs on python2 and has the following dependencies: `flask`, `flask_cors`, `pymongo`, `socketIO_client`, `flask_socketio`
+You will also need to install and run MongoDB on your system.
+
 ## Scripts
 To install the project:
 ```
@@ -63,9 +67,5 @@ $ npm start
 ```
 To run the server:
 ```
-FLASK_APP=server.py flask run
+$ FLASK_APP=server.py flask run
 ```
-
-## Dependencies
-For the backend server, you need the following Python dependencies: `flask`, `flask_cors`, `pymongo`, `socketIO_client`, `flask_socketio`
-MongoDB is required for the backend.
